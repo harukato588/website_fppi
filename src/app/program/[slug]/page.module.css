@@ -1,0 +1,246 @@
+.hero {
+    position: relative;
+    min-height: 55vh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+}
+
+.heroBg {
+    position: absolute;
+    inset: 0;
+}
+
+.heroBgImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.45;
+}
+
+.heroOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(10, 12, 20, 0.3) 0%, rgba(10, 12, 20, 0.95) 100%);
+}
+
+.heroContent {
+    position: relative;
+    z-index: 2;
+    padding: 40px 5% 52px;
+    max-width: 860px;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 16px;
+}
+
+.breadcrumb a {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.breadcrumb a:hover {
+    color: #fff;
+}
+
+.breadcrumbActive {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+}
+
+.badges {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+
+.catBadge {
+    display: inline-block;
+    background: rgba(59, 127, 245, 0.2);
+    border: 1px solid rgba(59, 127, 245, 0.4);
+    color: var(--blue2);
+    font-size: 11px;
+    padding: 4px 14px;
+    border-radius: 20px;
+}
+
+.statusBadge {
+    display: inline-block;
+    font-size: 11px;
+    padding: 4px 14px;
+    border-radius: 20px;
+}
+
+.statusDone {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #10b981;
+}
+
+.statusPlan {
+    background: rgba(59, 127, 245, 0.15);
+    border: 1px solid rgba(59, 127, 245, 0.3);
+    color: var(--blue2);
+}
+
+.heroTitle {
+    font-family: "Syne", sans-serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+}
+
+.heroMeta {
+    display: flex;
+    gap: 20px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.detail {
+    background: var(--bg);
+    padding: 64px 5%;
+}
+
+.detailInner {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.subTitle {
+    font-family: "Syne", sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+}
+
+.desc {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.9;
+    margin-bottom: 20px;
+}
+
+.timCard,
+.infoCard {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.timTitle {
+    font-family: "Syne", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+}
+
+.timList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.timItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.timAvatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Syne", sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.timNama {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.timPeran {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.infoList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.infoRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+}
+
+.infoRow:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.infoLabel {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.infoVal {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.backWrap {
+    background: var(--bg);
+    padding: 0 5% 72px;
+}
+
+.backBtn {
+    color: var(--blue2);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.backBtn:hover {
+    border-color: var(--blue2);
+}
+
+@media (max-width: 768px) {
+    .detailInner {
+        grid-template-columns: 1fr;
+    }
+}

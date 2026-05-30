@@ -1,0 +1,176 @@
+/* ===== PAGE HERO ===== */
+.pageHero {
+  padding: 120px 5% 72px;
+  background: var(--bg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.pageHero::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  right: -120px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59, 127, 245, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.pageHeroContent {
+  max-width: 680px;
+}
+
+.pageHeroLabel {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--blue2);
+  margin-bottom: 14px;
+}
+
+.pageHeroTitle {
+  font-family: "Syne", sans-serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.15;
+  margin-bottom: 16px;
+  letter-spacing: -0.5px;
+}
+
+.pageHeroDesc {
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.8;
+  max-width: 540px;
+}
+
+/* ===== LIST SECTION ===== */
+.listSection {
+  background: var(--bg);
+  padding: 64px 5% 96px;
+}
+
+.listGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 28px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ===== CARD ===== */
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35);
+  border-color: rgba(59, 127, 245, 0.3);
+}
+
+.cardImg {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.cardImg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.card:hover .cardImg img {
+  transform: scale(1.05);
+}
+
+.cardBadge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(10, 12, 20, 0.75);
+  border: 1px solid rgba(59, 127, 245, 0.4);
+  color: var(--blue2);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  backdrop-filter: blur(6px);
+}
+
+.pdfBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(220, 60, 60, 0.85);
+  border: 1px solid rgba(255, 100, 100, 0.4);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  backdrop-filter: blur(6px);
+}
+
+.cardBody {
+  padding: 22px 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.cardDate {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.cardTitle {
+  font-family: "Syne", sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.5;
+  flex: 1;
+}
+
+.cardLink {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--blue2);
+  margin-top: 4px;
+  transition: letter-spacing 0.2s ease;
+}
+
+.card:hover .cardLink {
+  letter-spacing: 0.5px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .pageHero {
+    padding: 100px 5% 48px;
+  }
+
+  .listGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}

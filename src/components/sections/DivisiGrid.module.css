@@ -1,0 +1,161 @@
+.section {
+  background: var(--bg);
+  padding: 56px 5% 80px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+
+.card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  border: 1px solid var(--border);
+  transition: transform 0.3s, border-color 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(59, 127, 245, 0.5);
+}
+
+/* Highlight card pertama (aktif/featured) */
+.card:first-child {
+  border-color: var(--blue);
+}
+
+/* Jika card terakhir adalah ganjil (misal ke-5), letakkan di tengah */
+.card:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+  max-width: calc(50% - 10px);
+  margin: 0 auto;
+  width: 100%;
+}
+
+.cardBg {
+  position: absolute;
+  inset: 0;
+}
+
+.cardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s;
+  filter: grayscale(20%);
+}
+
+.card:hover .cardImg {
+  transform: scale(1.05);
+}
+
+.cardOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top,
+      rgba(5, 7, 16, 0.92) 0%,
+      rgba(5, 7, 16, 0.5) 50%,
+      rgba(5, 7, 16, 0.2) 100%);
+  transition: background 0.3s;
+}
+
+.card:hover .cardOverlay {
+  background: linear-gradient(to top,
+      rgba(5, 7, 16, 0.95) 0%,
+      rgba(10, 30, 80, 0.6) 50%,
+      rgba(10, 30, 80, 0.25) 100%);
+}
+
+/* Arrow */
+.arrow {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  z-index: 2;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 18px;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.card:hover .arrow {
+  color: var(--blue2);
+  transform: translate(2px, -2px);
+}
+
+/* Content */
+.cardContent {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  padding: 20px 24px;
+}
+
+.cardName {
+  font-family: "Syne", sans-serif;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6px;
+  line-height: 1.3;
+  transition: color 0.2s;
+}
+
+.card:hover .cardName {
+  color: var(--blue2);
+}
+
+.cardDesc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
+  margin-bottom: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardStats {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.statBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    aspect-ratio: 4 / 3;
+  }
+
+  .card:last-child:nth-child(odd) {
+    grid-column: auto;
+    max-width: 100%;
+    margin: 0;
+  }
+}

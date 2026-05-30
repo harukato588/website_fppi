@@ -1,0 +1,144 @@
+.hero {
+  position: relative;
+  min-height: 60vh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+}
+
+.heroBgImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.5;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 12, 20, 0.3) 0%,
+    rgba(10, 12, 20, 0.95) 100%
+  );
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  padding: 40px 5% 56px;
+  max-width: 860px;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 16px;
+}
+
+.breadcrumb a {
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumb a:hover {
+  color: #fff;
+}
+
+.breadcrumbActive {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.catBadge {
+  display: inline-block;
+  background: rgba(59, 127, 245, 0.2);
+  border: 1px solid rgba(59, 127, 245, 0.4);
+  color: var(--blue2);
+  font-size: 11px;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+  letter-spacing: 0.5px;
+}
+
+.heroTitle {
+  font-family: "Syne", sans-serif;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  letter-spacing: -0.5px;
+}
+
+.heroMeta {
+  display: flex;
+  gap: 20px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  flex-wrap: wrap;
+}
+
+/* ARTIKEL */
+.article {
+  background: var(--bg);
+  padding: 64px 5%;
+}
+
+.articleInner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.lead {
+  font-size: 17px;
+  line-height: 1.9;
+  color: var(--text);
+  margin-bottom: 24px;
+  font-weight: 400;
+}
+
+.articleInner p {
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+/* BACK */
+.backWrap {
+  background: var(--bg);
+  padding: 0 5% 72px;
+  max-width: 760px;
+  margin: 0 auto;
+  padding-left: calc(5% + ((100% - 760px) / 2));
+}
+
+.backBtn {
+  color: var(--blue2);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.backBtn:hover {
+  border-color: var(--blue2);
+}
+
+@media (max-width: 768px) {
+  .heroContent {
+    padding: 32px 5% 40px;
+  }
+}
