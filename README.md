@@ -1,5 +1,5 @@
 # UKM FPPI — Website Resmi
-Website resmi **Forum Penalaran Penelitian Ilmiah (FPPI)** dibangun dengan Next.js 16, TypeScript, dan CSS Modules.
+Website resmi **Forum Penalaran Penelitian Ilmiah (FPPI)** dibangun dengan Next.js 16.2.6, TypeScript, dan CSS Modules.
 
 ---
 
