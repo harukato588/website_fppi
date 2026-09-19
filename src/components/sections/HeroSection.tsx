@@ -10,7 +10,7 @@ export default function HeroSection() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           className={styles.bgImg}
-          src="/image/20251109_100213.jpg"
+          src="https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/20251109_100213.jpg"
           alt=""
         />
         <div className={styles.overlay} />

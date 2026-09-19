@@ -1,7 +1,7 @@
-// =====================
+
 // SITE CONFIG — edit ini untuk update konten dari sini
 // Nanti bisa dihubungkan ke database / CMS untuk dashboard admin
-// =====================
+
 
 export const siteConfig = {
   name: "UKM FPPI",
@@ -9,10 +9,10 @@ export const siteConfig = {
   tagline: "Wadah pengembangan penalaran, penelitian, dan karya ilmiah mahasiswa menuju prestasi yang gemilang.",
   foundedYear: "2014",
   stats: [
-    { number: "20", label: "Anggota Aktif" },
+    { number: "15", label: "Anggota Aktif" },
     { number: "5", label: "Karya Ilmiah" },
     { number: "3", label: "Prestasi Nasional" },
-    { number: "2013", label: "Tahun Berdiri" },
+    { number: "2006", label: "Tahun Berdiri" },
   ],
 };
 
@@ -20,7 +20,7 @@ export const ketuaData = {
   name: "KELVIN ",
   role: "Ketua UKM FPPI 2025",
   nameFormal: "KELVIN LIE, 2025",
-  photo: "/image/Screenshot 2026-03-30 114522.png",
+  photo: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/kelvin.jpg",
   description:
     "Mahasiswa aktif yang berpengalaman dalam penelitian ilmiah dan kompetisi karya tulis tingkat nasional. Memiliki visi menjadikan FPPI sebagai wadah terdepan dalam mencetak peneliti muda yang inovatif dan berdedikasi untuk kemajuan bangsa.",
   phone: "+62 812 3456 7890",
@@ -31,20 +31,20 @@ export const beritaData = [
   {
     id: 1,
     category: "Kompetisi",
-    title: "PROPOSAL PKM KI BHUANTARA 2025 ",
+    title: "Proposal PKM-KC RESCUE(Real Time Emergency Signal Communication Unit For Everyone)",
     date: "15 Maret 2025",
-    image: "/image/Screenshot 2026-05-25 210131.png",
+    image: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/Screenshot_2026-09-18_144043.png",
     slug: "fppi-raih-juara-1-lktin-2024",
-    pdfUrl: "/dokumen/RandiPradityaBagusDarmawan_InstitutTeknologiDirgantaraAdisutjipto_PKM-KI.pdf",
+    pdfUrl: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/dokumen/RESCUE_REALTIME_EMERGENCY_UNIT_FOR_EVRYONE_.pdf",
   },
   {
     id: 2,
     category: "Kegiatan",
     title: "PROPOSAL PKM KI AEORSENSE 2025",
     date: "10 Maret 2025",
-    image: "/image/Screenshot 2026-05-25 210233.png",
+    image: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/Screenshot_2026-05-25_210131.png",
     slug: "workshop-karya-ilmiah-batch-5",
-    pdfUrl: "/dokumen/PKM 2026.pdf"
+    pdfUrl: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/dokumen/RESCUE_REALTIME_EMERGENCY_UNIT_FOR_EVRYONE_.pdf"
   },
   {
     id: 3,
@@ -95,9 +95,9 @@ export const navLinks = [
 ];
 
 
-// =====================
+
 // DATA DIVISI & ANGGOTA
-// =====================
+
 
 export const divisiData = [
   {
@@ -108,10 +108,11 @@ export const divisiData = [
     jumlahAnggota: 5,
     jumlahProgram: 4,
     anggota: [
-      { nama: "Nama Ketua", jabatan: "Ketua Umum", foto: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=70" },
-      { nama: "Nama Wakil", jabatan: "Wakil Ketua", foto: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&q=70" },
-      { nama: "Nama Sekretaris", jabatan: "Sekretaris", foto: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&q=70" },
-      { nama: "Nama Bendahara", jabatan: "bendahara", foto: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&q=70" }
+      { nama: "Kelvin lie", jabatan: "Ketua Umum", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/kelvin.jpg" },
+      { nama: "Maulana ", jabatan: "Wakil Ketua", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/maul.jpg" },
+      { nama: "Mesaya anggelo", jabatan: "Sekretaris", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/mesa.jpg" },
+      { nama: "Albertus lintang", jabatan: "Bendahara 1", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/Screenshot_2026-09-18_113815.png" },
+      { nama: "Delfin Tiara Santi Dohona", jabatan: "Bendahara 2", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/delfin.jpg" },
     ],
   },
   {
@@ -122,10 +123,11 @@ export const divisiData = [
     jumlahAnggota: 12,
     jumlahProgram: 6,
     anggota: [
-      { nama: "Nama Kepala Divisi", jabatan: "Kepala Divisi", foto: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=70" },
-      { nama: "Nama Anggota 1", jabatan: "Anggota", foto: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&q=70" },
-      { nama: "Nama Aggota 2", jabatan: "Anggota", foto: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&q=70" },
-      { nama: "Nama Anggota 3", jabatan: "Anggota", foto: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&q=70" },
+      { nama: "Marchel Ezy Alfaril", jabatan: "Kepala Divisi", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/marsel.jpg" },
+      { nama: "Petrus Adu", jabatan: "Anggota", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/eru.jpg" },
+      { nama: "randi", jabatan: "Anggota", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/randi.jpg" },
+      { nama: "dayat", jabatan: "Anggota", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/dayat.jpg" },
+      { nama: "Febriyanna", jabatan: "Anggota", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/febriyana.jpeg" },
     ],
   },
   {
@@ -136,10 +138,11 @@ export const divisiData = [
     jumlahAnggota: 8,
     jumlahProgram: 5,
     anggota: [
-      { nama: "Dylan putry Setyono", jabatan: "Kepala Divisi", foto: "/image/Screenshot 2026-03-30 122807.png" },
-      { nama: "Irsan Ali Wardaana", jabatan: "Anggota", foto: "/image/Screenshot 2026-03-30 221420.png" },
-      { nama: "Iqbal Budi Nugroho", jabatan: "Anggota", foto: "/image/DSC03343.JPG" },
-      { nama: "Felix Nathan Widyadhana", jabatan: "Anggota", foto: "/image/WhatsApp Image 2026-05-25 at 21.44.51.jpeg" },
+      { nama: "Dylan putry Setyono", jabatan: "Kepala Divisi", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/Screenshot_2026-03-30_122807.png" },
+      { nama: "Irsan Ali Wardaana", jabatan: "Anggota", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/irsan.jpg" },
+      { nama: "Iqbal Budi Nugroho", jabatan: "Anggota", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/budi.jpg" },
+      { nama: "Felix Nathan Widyadhana", jabatan: "Anggota", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/felix.jpg" },
+      { nama: "Putu Gede Yosafat Samuel", jabatan: "Anggota", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/yosafat.jpg" },
     ],
   },
   {
@@ -150,10 +153,13 @@ export const divisiData = [
     jumlahAnggota: 10,
     jumlahProgram: 7,
     anggota: [
-      { nama: "Nama Kepala Divisi", jabatan: "Kepala Divisi", foto: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&q=70" },
-      { nama: "Nama Anggota 1", jabatan: "Anggota", foto: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&q=70" },
-      { nama: "Nama Anggota 2", jabatan: "Anggota", foto: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&q=70" },
-      { nama: "Nama Anggota 3", jabatan: "Anggota", foto: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&q=70" },
+      { nama: "lia", jabatan: "Kepala Divisi", foto: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&q=70" },
+      { nama: "wulan", jabatan: "Anggota", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/wulan.jpg" },
+      { nama: "lili", jabatan: "Anggota", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/lili.jpg" },
+      { nama: "mahesa", jabatan: "Anggota", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/mahesa.jpg" },
+      { nama: "nashwan", jabatan: "Anggota", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/nashwan.jpg" },
+      { nama: "salim", jabatan: "Anggota", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/salim.jpg" },
+      { nama: "fizi", jabatan: "Anggota", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/budi.jpg" },
     ],
   },
   {
@@ -164,17 +170,18 @@ export const divisiData = [
     jumlahAnggota: 4,
     jumlahProgram: 3,
     anggota: [
-      { nama: "Nama Kepala Divisi", jabatan: "Kepala Divisi", foto: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=70" },
-      { nama: "Nama Anggota 1", jabatan: "Anggota", foto: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&q=70" },
-      { nama: "Nama Anggota 2", jabatan: "Anggota", foto: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&q=70" },
-      { nama: "Nama Anggota 3", jabatan: "Anggota", foto: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&q=70" },
+      { nama: "Arnholus Ifandi Lasi", jabatan: "Kepala Divisi", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/arnol.jpg" },
+      { nama: "Mukhammad Fajri", jabatan: "Anggota", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/fajri.jpg" },
+      { nama: "Febriyani", jabatan: "Anggota", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/febriyani.jpeg" },
+      { nama: "Berkat Soroinama Gea", jabatan: "Anggota", foto: "https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/berkat.jpg" },
     ],
   },
 ];
 
-// =====================
+
+
 // DATA PROGRAM KERJA
-// =====================
+
 export const programData = [
   {
     id: 1,

@@ -2,12 +2,13 @@
 
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { beritaData } from "@/lib/config";
+import { getBeritaBySlug } from "@/lib/supabase";
+import { Berita } from "@/lib/config";
 import Link from "next/link";
 import { notFound, useRouter } from "next/navigation";
 import styles from "./page.module.css";
 import { motion, Variants } from "framer-motion";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -31,20 +32,34 @@ export default function DetailBeritaPage({
 }) {
   const { slug } = React.use(params);
   const router = useRouter();
-  const berita = beritaData.find((b) => b.slug === slug);
-  
+  const [berita, setBerita] = useState<Berita | null>(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    if (berita && 'pdfUrl' in berita && berita.pdfUrl) {
-      router.push(berita.pdfUrl as string);
+    let isMounted = true;
+    getBeritaBySlug(slug).then((res) => {
+      if (isMounted) {
+        setBerita(res);
+        setLoading(false);
+      }
+    });
+    return () => { isMounted = false; };
+  }, [slug]);
+
+  useEffect(() => {
+    if (berita && berita.pdfUrl) {
+      router.push(berita.pdfUrl);
     }
   }, [berita, router]);
 
+  if (loading) {
+    return <div style={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>Memuat...</div>;
+  }
+
   if (!berita) notFound();
 
-  // Jika berita memiliki properti pdfUrl, kita tampilkan loading sebentar (atau null)
-  // karena useEffect akan menangani redirect.
-  if ('pdfUrl' in berita && berita.pdfUrl) {
-    return <div style={{ minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Membuka PDF...</div>;
+  if (berita.pdfUrl) {
+    return <div style={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>Membuka PDF...</div>;
   }
 
   return (

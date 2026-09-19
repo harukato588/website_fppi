@@ -34,7 +34,7 @@ export default function AboutSection() {
           <div className={styles.img}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/image/FPPI LOGI NO BG HD.png"
+              src="https://kdlkzwidtsxdzyjfdqpb.supabase.co/storage/v1/object/public/images/FPPI_LOGI_NO_BG_HD.png"
               alt="FPPI"
             />
           </div>

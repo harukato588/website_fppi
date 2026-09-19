@@ -73,6 +73,48 @@
   gap: 8px;
 }
 
+.bottomRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.adminLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+.adminLink:hover {
+  color: #3b82f6;
+  border-color: rgba(59, 130, 246, 0.4);
+  background: rgba(59, 130, 246, 0.08);
+  transform: translateY(-1px);
+}
+
+.lockIcon {
+  color: var(--muted);
+  transition: color 0.2s ease;
+}
+
+.adminLink:hover .lockIcon {
+  color: #3b82f6;
+}
+
+.dot {
+  color: var(--border);
+}
+
 .bigText {
   text-align: center;
   padding: 24px 0 0;

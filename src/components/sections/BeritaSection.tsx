@@ -1,10 +1,18 @@
 import Link from "next/link";
-import { beritaData, type Berita } from "@/lib/config";
+import { type Berita } from "@/lib/config";
+import { getBeritaList } from "@/lib/supabase";
 import styles from "./BeritaSection.module.css";
 
 function BeritaCard({ item }: { item: Berita }) {
+  const hasPdf = Boolean(item.pdfUrl);
+  const href = hasPdf ? (item.pdfUrl as string) : `/berita/${item.slug}`;
   return (
-    <Link href={`/berita/${item.slug}`} className={styles.card}>
+    <Link
+      href={href}
+      className={styles.card}
+      target={hasPdf ? "_blank" : undefined}
+      rel={hasPdf ? "noopener noreferrer" : undefined}
+    >
       <div className={styles.thumb}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={item.image} alt={item.title} />
@@ -18,7 +26,9 @@ function BeritaCard({ item }: { item: Berita }) {
   );
 }
 
-export default function BeritaSection() {
+export default async function BeritaSection() {
+  const beritaList = await getBeritaList();
+
   return (
     <section className={styles.section}>
       <div className={styles.header}>
@@ -34,7 +44,7 @@ export default function BeritaSection() {
       </div>
 
       <div className={styles.grid}>
-        {beritaData.map((item) => (
+        {beritaList.map((item) => (
           <BeritaCard key={item.id} item={item} />
         ))}
       </div>

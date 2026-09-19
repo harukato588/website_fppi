@@ -1,6 +1,6 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { beritaData } from "@/lib/config";
+import { getBeritaList } from "@/lib/supabase";
 import Link from "next/link";
 import styles from "./page.module.css";
 
@@ -9,7 +9,9 @@ export const metadata = {
     description: "Kumpulan berita, kegiatan, dan pengumuman terbaru dari UKM FPPI.",
 };
 
-export default function BeritaPage() {
+export default async function BeritaPage() {
+    const beritaList = await getBeritaList();
+
     return (
         <>
             <Navbar />
@@ -28,9 +30,9 @@ export default function BeritaPage() {
                 {/* DAFTAR BERITA */}
                 <section className={styles.listSection}>
                     <div className={styles.listGrid}>
-                        {beritaData.map((item) => {
-                            const hasPdf = 'pdfUrl' in item && item.pdfUrl;
-                            const href = hasPdf ? item.pdfUrl as string : `/berita/${item.slug}`;
+                        {beritaList.map((item) => {
+                            const hasPdf = Boolean(item.pdfUrl);
+                            const href = hasPdf ? (item.pdfUrl as string) : `/berita/${item.slug}`;
                             return (
                                 <Link
                                     key={item.id}
@@ -40,6 +42,7 @@ export default function BeritaPage() {
                                     rel={hasPdf ? "noopener noreferrer" : undefined}
                                 >
                                     <div className={styles.cardImg}>
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img src={item.image} alt={item.title} />
                                         <span className={styles.cardBadge}>{item.category}</span>
                                         {hasPdf && (
