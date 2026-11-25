@@ -18,30 +18,8 @@ import {
   uploadFileToSupabase,
   supabase,
 } from "@/lib/supabase";
+import { isValidHttpOrRelativeUrl as isValidUrl, sanitizeInput as sanitizeText } from "@/lib/validation";
 import styles from "./page.module.css";
-
-// Sanitasi string input — hapus karakter HTML berbahaya
-function sanitizeText(input: string): string {
-  return input
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#x27;")
-    .trim()
-    .slice(0, 300);
-}
-
-// Validasi URL foto / file — hanya izinkan http/https URL atau path relatif
-function isValidUrl(url: string): boolean {
-  if (!url) return false;
-  if (url.startsWith("/")) return true;
-  try {
-    const parsed = new URL(url);
-    return parsed.protocol === "https:" || parsed.protocol === "http:";
-  } catch {
-    return false;
-  }
-}
 
 // Format tanggal saat ini ke bahasa Indonesia
 function getFormattedCurrentDate(): string {
@@ -76,10 +54,10 @@ const MAX_DOC_SIZE_MB = 35;
 
 export default function AdminDashboardPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [pinInput, setPinInput] = useState("");
   const [authError, setAuthError] = useState("");
-  const [loginAttempts, setLoginAttempts] = useState(0);
-  const [lockedUntil, setLockedUntil] = useState<number | null>(null);
+  const [loggingIn, setLoggingIn] = useState(false);
 
   // Tab Utama Admin: 'anggota' vs 'berita'
   const [activeSection, setActiveSection] = useState<"anggota" | "berita">("berita");
@@ -134,22 +112,25 @@ export default function AdminDashboardPage() {
   const [beritaFormError, setBeritaFormError] = useState("");
   const [seedingBerita, setSeedingBerita] = useState(false);
 
-  // Check stored auth
+  // Check stored server-side HttpOnly session
   useEffect(() => {
-    const saved = localStorage.getItem("fppi_admin_auth");
-    const savedTs = localStorage.getItem("fppi_admin_auth_ts");
-    const SESSION_MAX_MS = 8 * 60 * 60 * 1000; // 8 jam
-    if (
-      saved &&
-      saved !== "true" &&
-      savedTs &&
-      Date.now() - Number(savedTs) < SESSION_MAX_MS
-    ) {
-      setIsAuthenticated(true);
-    } else {
-      localStorage.removeItem("fppi_admin_auth");
-      localStorage.removeItem("fppi_admin_auth_ts");
-    }
+    // Hapus sisa token lama di localStorage jika ada
+    localStorage.removeItem("fppi_admin_auth");
+    localStorage.removeItem("fppi_admin_auth_ts");
+
+    fetch("/api/admin/auth")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.authenticated) {
+          setIsAuthenticated(true);
+        }
+      })
+      .catch(() => {
+        setIsAuthenticated(false);
+      })
+      .finally(() => {
+        setCheckingAuth(false);
+      });
   }, []);
 
   // Fetch data
@@ -184,47 +165,40 @@ export default function AdminDashboardPage() {
     }
   }, [isAuthenticated]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoggingIn(true);
+    setAuthError("");
 
-    if (lockedUntil && Date.now() < lockedUntil) {
-      const remaining = Math.ceil((lockedUntil - Date.now()) / 1000);
-      setAuthError(`Terlalu banyak percobaan salah. Coba lagi dalam ${remaining} detik.`);
-      return;
-    }
+    try {
+      const res = await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin: pinInput }),
+      });
+      const data = await res.json();
 
-    if (process.env.NEXT_PUBLIC_ADMIN_PIN === "UNCONFIGURED") {
-      setAuthError("Admin PIN belum dikonfigurasi. Hubungi administrator.");
-      return;
-    }
-
-    if (pinInput === process.env.NEXT_PUBLIC_ADMIN_PIN) {
-      setIsAuthenticated(true);
-      const sessionToken = `fppi_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-      localStorage.setItem("fppi_admin_auth", sessionToken);
-      localStorage.setItem("fppi_admin_auth_ts", String(Date.now()));
-      setAuthError("");
-      setLoginAttempts(0);
-      setLockedUntil(null);
-    } else {
-      const newAttempts = loginAttempts + 1;
-      setLoginAttempts(newAttempts);
-      if (newAttempts >= 5) {
-        const lockTime = Date.now() + 30_000;
-        setLockedUntil(lockTime);
-        setAuthError("Terlalu banyak percobaan salah. Akun dikunci selama 30 detik.");
+      if (res.ok && data?.authenticated) {
+        setIsAuthenticated(true);
+        setPinInput("");
+        setAuthError("");
       } else {
-        setAuthError(`PIN yang Anda masukkan salah! (${5 - newAttempts} percobaan tersisa)`);
+        setAuthError(data?.error || "PIN yang Anda masukkan salah!");
       }
+    } catch {
+      setAuthError("Gagal terhubung ke server autentikasi.");
+    } finally {
+      setLoggingIn(false);
     }
   };
 
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem("fppi_admin_auth");
-    localStorage.removeItem("fppi_admin_auth_ts");
-    setLoginAttempts(0);
-    setLockedUntil(null);
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/admin/auth", { method: "DELETE" });
+    } finally {
+      setIsAuthenticated(false);
+      setPinInput("");
+    }
   };
 
   // ==========================================
@@ -527,6 +501,14 @@ export default function AdminDashboardPage() {
       setBeritaFormError("Kategori wajib dipilih atau diisi!");
       return;
     }
+    if (!isValidUrl(safeImage)) {
+      setBeritaFormError("URL cover/gambar tidak valid. Gunakan URL https:// atau path relatif.");
+      return;
+    }
+    if (safePdfUrl && !isValidUrl(safePdfUrl)) {
+      setBeritaFormError("URL dokumen PDF tidak valid. Gunakan URL https:// atau path relatif.");
+      return;
+    }
 
     setBeritaSubmitting(true);
     setBeritaFormError("");
@@ -635,6 +617,16 @@ export default function AdminDashboardPage() {
   const totalDokumenPdf = beritaList.filter((b) => Boolean(b.pdf_url || b.pdfUrl)).length;
   const totalJurnal = beritaList.filter((b) => (b.category || "").toLowerCase().includes("jurnal")).length;
 
+  if (checkingAuth) {
+    return (
+      <div className={styles.authWrap}>
+        <div className={styles.authCard}>
+          <p style={{ color: "#94a3b8", fontSize: "0.95rem" }}>Memverifikasi sesi admin...</p>
+        </div>
+      </div>
+    );
+  }
+
   // Jika Belum Auth
   if (!isAuthenticated) {
     return (
@@ -655,8 +647,8 @@ export default function AdminDashboardPage() {
               />
             </div>
             {authError && <p style={{ color: "#f87171", fontSize: "0.85rem", marginBottom: 16 }}>{authError}</p>}
-            <button type="submit" className={styles.primaryBtn}>
-              Masuk Dashboard
+            <button type="submit" disabled={loggingIn} className={styles.primaryBtn}>
+              {loggingIn ? "Memverifikasi..." : "Masuk Dashboard"}
             </button>
           </form>
           <div style={{ marginTop: 24 }}>

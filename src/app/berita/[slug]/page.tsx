@@ -4,6 +4,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { getBeritaBySlug } from "@/lib/supabase";
 import { Berita } from "@/lib/config";
+import { isValidHttpOrRelativeUrl } from "@/lib/validation";
 import Link from "next/link";
 import { notFound, useRouter } from "next/navigation";
 import styles from "./page.module.css";
@@ -56,8 +57,9 @@ export default function DetailBeritaPage({
 
   if (!berita) notFound();
 
-  const hasPdf = Boolean(berita.pdfUrl || (berita as any).pdf_url);
-  const pdfLink = (berita.pdfUrl || (berita as any).pdf_url) as string;
+  const rawPdfLink = (berita.pdfUrl || (berita as any).pdf_url || "") as string;
+  const hasPdf = Boolean(rawPdfLink && isValidHttpOrRelativeUrl(rawPdfLink));
+  const pdfLink = hasPdf ? rawPdfLink : "";
   const isJurnal = (berita.category || "").toLowerCase().includes("jurnal");
 
   return (

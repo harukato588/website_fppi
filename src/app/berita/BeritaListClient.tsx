@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Berita } from "@/lib/config";
+import { isValidHttpOrRelativeUrl } from "@/lib/validation";
 import styles from "./page.module.css";
 
 export default function BeritaListClient({ initialBerita }: { initialBerita: Berita[] }) {
@@ -96,8 +97,9 @@ export default function BeritaListClient({ initialBerita }: { initialBerita: Ber
       ) : (
         <div className={styles.listGrid}>
           {filteredList.map((item) => {
-            const hasPdf = Boolean(item.pdfUrl || (item as any).pdf_url);
-            const pdfLink = (item.pdfUrl || (item as any).pdf_url) as string;
+            const rawPdfLink = (item.pdfUrl || (item as any).pdf_url || "") as string;
+            const hasPdf = Boolean(rawPdfLink && isValidHttpOrRelativeUrl(rawPdfLink));
+            const pdfLink = hasPdf ? rawPdfLink : "";
             const isJurnal = item.category.toLowerCase().includes("jurnal");
             const isProposal = item.category.toLowerCase().includes("proposal") || item.category.toLowerCase().includes("pkm");
 

@@ -4,6 +4,8 @@ import { getBeritaList } from "@/lib/supabase";
 import BeritaListClient from "./BeritaListClient";
 import styles from "./page.module.css";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
     title: "Berita, Jurnal & Dokumen Riset | UKM FPPI",
     description: "Kumpulan jurnal ilmiah, proposal PKM, karya tulis, dan berita kegiatan terbaru dari UKM FPPI.",

@@ -8,6 +8,8 @@ import BeritaSection from "@/components/sections/BeritaSection";
 import ContactSection from "@/components/sections/ContactSection";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <>
