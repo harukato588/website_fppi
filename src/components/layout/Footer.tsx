@@ -11,7 +11,7 @@ export default function Footer() {
             FPPI <span>UKM</span>
           </div>
           <p className={styles.brandDesc}>
-            {siteConfig.fullName} — Wadah mahasiswa berprestasi dalam penelitian dan karya ilmiah.
+            {siteConfig.fullName} — Wadah mahasiswa berprestasi dalam penalaran, penelitian, dan karya ilmiah.
           </p>
         </div>
 
@@ -27,20 +27,20 @@ export default function Footer() {
         </div>
 
         <div>
-          <div className={styles.linksTitle}>Anggota</div>
+          <div className={styles.linksTitle}>Organisasi &amp; Anggota</div>
           <div className={styles.links}>
-            <Link href="/anggota" className={styles.link}>Daftar Anggota</Link>
-            <Link href="/pengurus" className={styles.link}>Pengurus</Link>
-            <Link href="/alumni" className={styles.link}>Alumni</Link>
+            <Link href="/anggota" className={styles.link}>Divisi &amp; Anggota</Link>
+            <Link href="/anggota/pengurus-harian" className={styles.link}>Pengurus Harian</Link>
+            <Link href="/daftar" className={styles.link}>Pendaftaran Baru</Link>
           </div>
         </div>
 
         <div>
-          <div className={styles.linksTitle}>Kontak</div>
+          <div className={styles.linksTitle}>Kontak Resmi</div>
           <div className={styles.links}>
-            <a href={`https://wa.me/${contactData.whatsapp.replace(/\D/g, "")}`} className={styles.link} target="_blank" rel="noopener noreferrer">WhatsApp</a>
-            <a href={`https://instagram.com/${contactData.instagram.replace("@", "")}`} className={styles.link} target="_blank" rel="noopener noreferrer">Instagram</a>
-            <a href={`mailto:${contactData.email}`} className={styles.link}>Email</a>
+            <a href={`https://wa.me/${contactData.whatsapp.replace(/\D/g, "")}`} className={styles.link} target="_blank" rel="noopener noreferrer">WhatsApp Resmi</a>
+            <a href={`https://www.instagram.com/fppi_itda/${contactData.instagram.replace("@", "")}`} className={styles.link} target="_blank" rel="noopener noreferrer">Instagram (@fppi_itda)</a>
+            <a href={`mailto:${contactData.email}`} className={styles.link}>Email FPPI</a>
           </div>
         </div>
       </div>
@@ -49,16 +49,16 @@ export default function Footer() {
         <span suppressHydrationWarning>© {new Date().getFullYear()} UKM FPPI. Semua hak dilindungi.</span>
         <div className={styles.bottomRight}>
           <Link href="/admin" className={styles.adminLink} title="Akses Dashboard Admin">
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              width="13" 
-              height="13" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               className={styles.lockIcon}
             >
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>

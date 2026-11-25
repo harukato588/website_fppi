@@ -281,6 +281,15 @@ export type Anggota = (typeof divisiData)[number]["anggota"][number];
 
 
 // Types
-export type Berita = (typeof beritaData)[number];
+export interface Berita {
+  id: number | string;
+  category: string;
+  title: string;
+  date: string;
+  image: string;
+  slug: string;
+  pdfUrl?: string;
+  pdf_url?: string;
+}
 export type ContactData = typeof contactData;
 export type KetuaData = typeof ketuaData;

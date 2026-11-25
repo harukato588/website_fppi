@@ -57,6 +57,23 @@
   color: var(--text);
 }
 
+.linkActive {
+  color: var(--blue2) !important;
+  font-weight: 600;
+  position: relative;
+}
+
+.linkActive::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--blue2);
+  border-radius: 2px;
+}
+
 .cta {
   background: var(--blue);
   color: #fff;
@@ -123,6 +140,11 @@
 
 .mobileLink:hover {
   color: var(--text);
+}
+
+.mobileLinkActive {
+  color: var(--blue2) !important;
+  font-weight: 600;
 }
 
 .mobileCta {

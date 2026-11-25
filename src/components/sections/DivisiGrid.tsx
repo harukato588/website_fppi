@@ -1,5 +1,5 @@
 "use client";
- 
+
 import Link from "next/link";
 import { divisiData } from "@/lib/config";
 import styles from "./DivisiGrid.module.css";

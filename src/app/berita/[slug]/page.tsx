@@ -46,21 +46,19 @@ export default function DetailBeritaPage({
     return () => { isMounted = false; };
   }, [slug]);
 
-  useEffect(() => {
-    if (berita && berita.pdfUrl) {
-      router.push(berita.pdfUrl);
-    }
-  }, [berita, router]);
-
   if (loading) {
-    return <div style={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>Memuat...</div>;
+    return (
+      <div style={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center", color: "#94a3b8" }}>
+        Memuat data publikasi...
+      </div>
+    );
   }
 
   if (!berita) notFound();
 
-  if (berita.pdfUrl) {
-    return <div style={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>Membuka PDF...</div>;
-  }
+  const hasPdf = Boolean(berita.pdfUrl || (berita as any).pdf_url);
+  const pdfLink = (berita.pdfUrl || (berita as any).pdf_url) as string;
+  const isJurnal = (berita.category || "").toLowerCase().includes("jurnal");
 
   return (
     <>
@@ -69,6 +67,7 @@ export default function DetailBeritaPage({
         {/* HERO FOTO */}
         <section className={styles.hero}>
           <div className={styles.heroBg}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={berita.image} alt={berita.title} className={styles.heroBgImg} />
             <div className={styles.heroOverlay} />
           </div>
@@ -80,7 +79,7 @@ export default function DetailBeritaPage({
             >
               <Link href="/">Beranda</Link>
               <span>›</span>
-              <Link href="/berita">Berita</Link>
+              <Link href="/berita">Berita &amp; Jurnal</Link>
               <span>›</span>
               <span className={styles.breadcrumbActive}>{berita.category}</span>
             </motion.div>
@@ -107,50 +106,84 @@ export default function DetailBeritaPage({
               transition={{ delay: 0.3 }}
             >
               <span>📅 {berita.date}</span>
-              <span>✍️ Tim FPPI</span>
+              <span>✍️ Tim Riset &amp; Publikasi FPPI</span>
+              {hasPdf && <span>📄 Dokumen PDF Tersedia</span>}
             </motion.div>
           </div>
         </section>
 
-        {/* ISI ARTIKEL */}
-        <section className={styles.article}>
-          <motion.div
-            className={styles.articleInner}
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <motion.p variants={itemVariants} className={styles.lead}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </motion.p>
-            <motion.p variants={itemVariants}>
-              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-              fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-              culpa qui officia deserunt mollit anim id est laborum.
-            </motion.p>
-            <motion.p variants={itemVariants}>
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
-              doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore
-              veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-            </motion.p>
-            <motion.p variants={itemVariants}>
-              Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
-              quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-            </motion.p>
-          </motion.div>
-        </section>
+        {/* TAMPILAN DOKUMEN JURNAL / PDF */}
+        {hasPdf ? (
+          <section className={styles.pdfSection}>
+            <div className={styles.pdfCard}>
+              <div className={styles.pdfHeader}>
+                <div className={styles.pdfTitle}>
+                  <span>{isJurnal ? "📚 Pratinjau Jurnal Ilmiah" : "📄 Pratinjau Dokumen PDF"}</span>
+                </div>
+                <div className={styles.pdfActions}>
+                  <a
+                    href={pdfLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.pdfBtn}
+                  >
+                    📥 Unduh / Buka Fullscreen ↗
+                  </a>
+                </div>
+              </div>
+
+              {/* EMBEDDED PDF VIEWER */}
+              <iframe
+                src={pdfLink}
+                title={berita.title}
+                className={styles.pdfFrame}
+              />
+
+              <div className={styles.pdfNotice}>
+                <span>💡 Dokumen jurnal dimuat langsung dari repository publikasi FPPI.</span>
+                <a
+                  href={pdfLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "var(--blue2)", textDecoration: "underline" }}
+                >
+                  Klik di sini jika PDF tidak tampil otomatis di browser Anda
+                </a>
+              </div>
+            </div>
+          </section>
+        ) : (
+          /* ISI ARTIKEL TEKS BIASA */
+          <section className={styles.article}>
+            <motion.div
+              className={styles.articleInner}
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              <motion.p variants={itemVariants} className={styles.lead}>
+                Informasi dan rilis resmi terkait {berita.title} yang diterbitkan oleh Forum Penalaran Penelitian Ilmiah (FPPI).
+              </motion.p>
+              <motion.p variants={itemVariants}>
+                FPPI senantiasa mendorong partisipasi aktif mahasiswa dalam berbagai kegiatan penelitian,
+                penulisan karya tulis ilmiah, serta keikutsertaan dalam ajang kompetisi tingkat nasional maupun internasional.
+              </motion.p>
+              <motion.p variants={itemVariants}>
+                Untuk informasi lebih lanjut mengenai kegiatan dan program ini, silakan hubungi pengurus divisi terkait melalui kontak resmi FPPI.
+              </motion.p>
+            </motion.div>
+          </section>
+        )}
 
         {/* BACK BUTTON */}
         <motion.div
           className={styles.backWrap}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.3 }}
         >
           <Link href="/berita" className={styles.backBtn}>
-            ← Kembali ke Berita
+            ← Kembali ke Daftar Berita &amp; Jurnal
           </Link>
         </motion.div>
       </main>

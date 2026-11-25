@@ -1,10 +1,10 @@
+import Link from "next/link";
 import { siteConfig } from "@/lib/config";
 import styles from "./AboutSection.module.css";
 
 export default function AboutSection() {
   return (
     <section className={styles.about}>
-      {/* 1. BAGIAN YANG DIUBAH: Menambahkan wrapper styles.titleWrap */}
       <div className={styles.titleWrap}>
         <span className="section-tag">Tentang Kami</span>
         <h2 className="section-title">
@@ -25,9 +25,14 @@ export default function AboutSection() {
             dan kompetisi penelitian, FPPI terus berkomitmen mencetak generasi mahasiswa yang
             kritis, analitis, dan berdedikasi.
           </p>
-          <button className="btn-outline" style={{ marginTop: "8px" }}>
-            Selengkapnya
-          </button>
+          <div style={{ display: "flex", gap: "12px", marginTop: "16px", flexWrap: "wrap" }}>
+            <Link href="/program" className="btn-primary">
+              Lihat Program Kerja →
+            </Link>
+            <Link href="/anggota" className="btn-outline">
+              Struktur Divisi &amp; Anggota
+            </Link>
+          </div>
         </div>
 
         <div className={styles.imgWrap}>

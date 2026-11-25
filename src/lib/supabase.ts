@@ -18,6 +18,17 @@ export interface AnggotaItem {
   foto: string;
 }
 
+export interface BeritaItem {
+  id?: number | string;
+  category: string;
+  title: string;
+  date: string;
+  image: string;
+  slug: string;
+  pdf_url?: string;
+  pdfUrl?: string;
+}
+
 /**
  * Mengambil daftar berita dari Supabase.
  * Jika Supabase belum dikonfigurasi atau terjadi error, otomatis fallback ke data lokal config.ts.
@@ -47,6 +58,7 @@ export async function getBeritaList(): Promise<Berita[]> {
       date: item.date,
       image: item.image,
       slug: item.slug,
+      pdf_url: item.pdf_url || undefined,
       pdfUrl: item.pdf_url || undefined,
     }));
   } catch (err) {
@@ -81,11 +93,90 @@ export async function getBeritaBySlug(slug: string): Promise<Berita | null> {
       date: data.date,
       image: data.image,
       slug: data.slug,
+      pdf_url: data.pdf_url || undefined,
       pdfUrl: data.pdf_url || undefined,
     };
   } catch (err) {
     return beritaData.find((b) => b.slug === slug) || null;
   }
+}
+
+/**
+ * Tambah berita / dokumen jurnal baru ke Supabase.
+ */
+export async function createBerita(item: Omit<BeritaItem, "id">) {
+  if (!supabase) {
+    throw new Error("Supabase client belum terkonfigurasi di env.");
+  }
+  const payload = {
+    category: item.category,
+    title: item.title,
+    date: item.date,
+    image: item.image,
+    slug: item.slug,
+    pdf_url: item.pdf_url || item.pdfUrl || null,
+  };
+  const { data, error } = await supabase.from("berita").insert([payload]).select();
+  if (error) throw error;
+  return data;
+}
+
+/**
+ * Update berita / dokumen jurnal di Supabase.
+ */
+export async function updateBerita(id: number | string, item: Partial<BeritaItem>) {
+  if (!supabase) {
+    throw new Error("Supabase client belum terkonfigurasi di env.");
+  }
+  const payload: Record<string, any> = {};
+  if (item.category !== undefined) payload.category = item.category;
+  if (item.title !== undefined) payload.title = item.title;
+  if (item.date !== undefined) payload.date = item.date;
+  if (item.image !== undefined) payload.image = item.image;
+  if (item.slug !== undefined) payload.slug = item.slug;
+  if (item.pdf_url !== undefined || item.pdfUrl !== undefined) {
+    payload.pdf_url = item.pdf_url || item.pdfUrl || null;
+  }
+
+  const { data, error } = await supabase
+    .from("berita")
+    .update(payload)
+    .eq("id", id)
+    .select();
+  if (error) throw error;
+  return data;
+}
+
+/**
+ * Hapus berita / dokumen jurnal dari Supabase.
+ */
+export async function deleteBerita(id: number | string) {
+  if (!supabase) {
+    throw new Error("Supabase client belum terkonfigurasi di env.");
+  }
+  const { data, error } = await supabase.from("berita").delete().eq("id", id);
+  if (error) throw error;
+  return data;
+}
+
+/**
+ * Impor data awal berita bawaan (config.ts) ke Supabase.
+ */
+export async function seedBeritaLocalData() {
+  if (!supabase) {
+    throw new Error("Supabase client belum terkonfigurasi di env.");
+  }
+  const itemsToInsert = beritaData.map((b) => ({
+    category: b.category,
+    title: b.title,
+    date: b.date,
+    image: b.image,
+    slug: b.slug,
+    pdf_url: (b as any).pdfUrl || null,
+  }));
+  const { data, error } = await supabase.from("berita").insert(itemsToInsert).select();
+  if (error) throw error;
+  return data;
 }
 
 /**
@@ -223,13 +314,24 @@ export async function uploadFileToSupabase(
     throw new Error("Supabase client belum terkonfigurasi di env.");
   }
 
-  const fileExt = file.name.split(".").pop() || "png";
+  const fileExt = file.name.split(".").pop()?.toLowerCase() || "png";
   const cleanBase = file.name.substring(0, file.name.lastIndexOf(".")).replace(/[^a-zA-Z0-9]/g, "_");
   const fileName = `${Date.now()}_${cleanBase}.${fileExt}`;
+
+  let contentType = file.type;
+  if (!contentType) {
+    if (fileExt === "pdf") contentType = "application/pdf";
+    else if (fileExt === "doc") contentType = "application/msword";
+    else if (fileExt === "docx") contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    else if (["jpg", "jpeg"].includes(fileExt)) contentType = "image/jpeg";
+    else if (fileExt === "png") contentType = "image/png";
+    else if (fileExt === "webp") contentType = "image/webp";
+  }
 
   const { data, error } = await supabase.storage
     .from(bucketName)
     .upload(fileName, file, {
+      contentType: contentType || undefined,
       cacheControl: "3600",
       upsert: true,
     });

@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { navLinks, siteConfig } from "@/lib/config";
+import { usePathname } from "next/navigation";
+import { navLinks } from "@/lib/config";
 import styles from "./Navbar.module.css";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <nav className={styles.nav}>
@@ -19,11 +21,20 @@ export default function Navbar() {
 
         {/* Desktop Links */}
         <div className={styles.links}>
-          {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} className={styles.link}>
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            const isActive =
+              pathname === link.href ||
+              (link.href !== "/" && pathname.startsWith(link.href));
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`${styles.link} ${isActive ? styles.linkActive : ""}`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </div>
 
         {/* CTA */}
@@ -46,17 +57,26 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {menuOpen && (
         <div className={styles.mobileMenu}>
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={styles.mobileLink}
-              onClick={() => setMenuOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
-          <Link href="/daftar" className={styles.mobileCta}>
+          {navLinks.map((link) => {
+            const isActive =
+              pathname === link.href ||
+              (link.href !== "/" && pathname.startsWith(link.href));
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`${styles.mobileLink} ${isActive ? styles.mobileLinkActive : ""}`}
+                onClick={() => setMenuOpen(false)}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+          <Link
+            href="/daftar"
+            className={styles.mobileCta}
+            onClick={() => setMenuOpen(false)}
+          >
             Bergabung
           </Link>
         </div>

@@ -4,18 +4,24 @@ import { getBeritaList } from "@/lib/supabase";
 import styles from "./BeritaSection.module.css";
 
 function BeritaCard({ item }: { item: Berita }) {
-  const hasPdf = Boolean(item.pdfUrl);
-  const href = hasPdf ? (item.pdfUrl as string) : `/berita/${item.slug}`;
+  const hasPdf = Boolean(item.pdfUrl || (item as any).pdf_url);
+  const isJurnal = item.category.toLowerCase().includes("jurnal");
   return (
     <Link
-      href={href}
+      href={`/berita/${item.slug}`}
       className={styles.card}
-      target={hasPdf ? "_blank" : undefined}
-      rel={hasPdf ? "noopener noreferrer" : undefined}
     >
       <div className={styles.thumb}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={item.image} alt={item.title} />
+        <img
+          src={item.image || "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&q=70"}
+          alt={item.title}
+        />
+        {hasPdf && (
+          <span className={styles.pdfBadge}>
+            {isJurnal ? "📚 JURNAL" : "📄 PDF"}
+          </span>
+        )}
       </div>
       <div className={styles.body}>
         <span className={styles.cat}>{item.category}</span>
@@ -33,13 +39,13 @@ export default async function BeritaSection() {
     <section className={styles.section}>
       <div className={styles.header}>
         <div>
-          <span className="section-tag">Informasi</span>
+          <span className="section-tag">Informasi &amp; Publikasi</span>
           <h2 className="section-title">
-            Berita <span>Terkini</span>
+            Berita &amp; <span>Jurnal Ilmiah</span>
           </h2>
         </div>
         <Link href="/berita" className={styles.seeAll}>
-          Lihat semua berita →
+          Lihat semua berita &amp; jurnal →
         </Link>
       </div>
 
