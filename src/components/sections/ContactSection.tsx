@@ -3,20 +3,6 @@ import styles from "./ContactSection.module.css";
 
 const contactItems = [
   {
-    icon: "📞",
-    label: "Telepon Resmi",
-    value: contactData.phone,
-    href: `tel:${contactData.phone.replace(/\s+/g, "")}`,
-    external: false,
-  },
-  {
-    icon: "📱",
-    label: "WhatsApp Panitia & Info",
-    value: contactData.whatsapp,
-    href: `https://wa.me/${contactData.whatsapp.replace(/\D/g, "")}?text=Halo%20UKM%20FPPI,%20saya%20ingin%20bertanya%20seputar%20kegiatan%20dan%20informasi%20FPPI.`,
-    external: true,
-  },
-  {
     icon: "✉️",
     label: "Email Resmi",
     value: contactData.email,
