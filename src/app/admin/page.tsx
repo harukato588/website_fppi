@@ -547,8 +547,17 @@ export default function AdminDashboardPage() {
   const handleDeleteBerita = async (item: BeritaItem) => {
     if (!confirm(`Yakin ingin menghapus dokumen/berita "${item.title}"?`)) return;
 
-    if (String(item.id).startsWith("local-") || typeof item.id === "number" && item.id <= 6 && !supabase) {
-      alert("Data bawaan lokal tidak dapat dihapus jika belum disinkronkan ke Supabase.");
+    // Deteksi apakah ini data lokal: ID integer (bukan UUID) atau prefix "local-"
+    const idStr = String(item.id ?? "");
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(idStr);
+    const isLocalData = idStr.startsWith("local-") || /^\d+$/.test(idStr) || !isUuid;
+
+    if (isLocalData) {
+      alert(
+        `Data "${item.title}" adalah data bawaan lokal dan tidak dapat dihapus langsung.\n\n` +
+        `Silakan impor data ke Supabase terlebih dahulu menggunakan tombol "⚡ Impor Berita Bawaan ke Supabase", ` +
+        `kemudian hapus dari sana.`
+      );
       return;
     }
 

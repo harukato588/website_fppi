@@ -105,7 +105,10 @@ export default function BeritaListClient({ initialBerita }: { initialBerita: Ber
 
             return (
               <div key={item.id} className={styles.card}>
-                <Link href={`/berita/${item.slug}`} style={{ textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", height: "100%" }}>
+                <Link
+                  href={`/berita/${item.slug}`}
+                  style={{ textDecoration: "none", color: "inherit", display: "block" }}
+                >
                   <div className={styles.cardImg}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
@@ -125,38 +128,58 @@ export default function BeritaListClient({ initialBerita }: { initialBerita: Ber
                       </span>
                     )}
                   </div>
-                  <div className={styles.cardBody}>
-                    <p className={styles.cardDate}>📅 {item.date}</p>
-                    <h2 className={styles.cardTitle}>{item.title}</h2>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto", paddingTop: 8 }}>
-                      <span className={styles.cardLink}>
-                        {isJurnal ? "Baca Jurnal 📄 →" : isProposal ? "Lihat Proposal 📄 →" : hasPdf ? "Buka Dokumen 📄 →" : "Baca Selengkapnya →"}
-                      </span>
-                      {hasPdf && (
-                        <a
-                          href={pdfLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          style={{
-                            fontSize: "0.75rem",
-                            color: "#38bdf8",
-                            background: "rgba(56, 189, 248, 0.1)",
-                            padding: "4px 8px",
-                            borderRadius: "6px",
-                            border: "1px solid rgba(56, 189, 248, 0.2)",
-                            textDecoration: "none",
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: 3,
-                          }}
-                        >
-                          Unduh PDF ↗
-                        </a>
-                      )}
-                    </div>
-                  </div>
                 </Link>
+
+                <div className={styles.cardBody}>
+                  <p className={styles.cardDate}>📅 {item.date}</p>
+                  <Link
+                    href={`/berita/${item.slug}`}
+                    style={{ textDecoration: "none", color: "inherit", flex: 1 }}
+                  >
+                    <h2 className={styles.cardTitle}>{item.title}</h2>
+                  </Link>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginTop: "auto",
+                      paddingTop: 12,
+                    }}
+                  >
+                    <Link href={`/berita/${item.slug}`} className={styles.cardLink}>
+                      {isJurnal
+                        ? "Baca Jurnal 📄 →"
+                        : isProposal
+                        ? "Lihat Proposal 📄 →"
+                        : hasPdf
+                        ? "Buka Dokumen 📄 →"
+                        : "Baca Selengkapnya →"}
+                    </Link>
+                    {hasPdf && (
+                      <a
+                        href={pdfLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          fontSize: "0.75rem",
+                          color: "#38bdf8",
+                          background: "rgba(56, 189, 248, 0.1)",
+                          padding: "4px 8px",
+                          borderRadius: "6px",
+                          border: "1px solid rgba(56, 189, 248, 0.2)",
+                          textDecoration: "none",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 3,
+                        }}
+                      >
+                        Unduh PDF ↗
+                      </a>
+                    )}
+                  </div>
+                </div>
               </div>
             );
           })}

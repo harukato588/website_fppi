@@ -42,7 +42,7 @@ export async function getBeritaList(): Promise<Berita[]> {
     const { data, error } = await supabase
       .from("berita")
       .select("*")
-      .order("id", { ascending: false });
+      .order("created_at", { ascending: false });
 
     if (error || !data || data.length === 0) {
       if (error) {
@@ -52,12 +52,12 @@ export async function getBeritaList(): Promise<Berita[]> {
     }
 
     return data.map((item) => ({
-      id: Number(item.id),
-      category: item.category,
-      title: item.title,
-      date: item.date,
-      image: item.image,
-      slug: item.slug,
+      id: (!isNaN(Number(item.id)) && String(item.id).trim() !== "") ? Number(item.id) : String(item.id),
+      category: item.kategori || item.category || "Jurnal Ilmiah",
+      title: item.judul || item.title || "Tanpa Judul",
+      date: item.tanggal || item.date || "",
+      image: item.image || "",
+      slug: item.slug || "",
       pdf_url: item.pdf_url || undefined,
       pdfUrl: item.pdf_url || undefined,
     }));
@@ -87,12 +87,12 @@ export async function getBeritaBySlug(slug: string): Promise<Berita | null> {
     }
 
     return {
-      id: Number(data.id),
-      category: data.category,
-      title: data.title,
-      date: data.date,
-      image: data.image,
-      slug: data.slug,
+      id: (!isNaN(Number(data.id)) && String(data.id).trim() !== "") ? Number(data.id) : String(data.id),
+      category: data.kategori || data.category || "Jurnal Ilmiah",
+      title: data.judul || data.title || "Tanpa Judul",
+      date: data.tanggal || data.date || "",
+      image: data.image || "",
+      slug: data.slug || "",
       pdf_url: data.pdf_url || undefined,
       pdfUrl: data.pdf_url || undefined,
     };
@@ -102,48 +102,111 @@ export async function getBeritaBySlug(slug: string): Promise<Berita | null> {
 }
 
 /**
+ * Deteksi skema kolom aktual tabel berita di Supabase.
+ * Mengembalikan 'indonesia' jika menggunakan kolom judul/kategori/tanggal,
+ * atau 'english' jika menggunakan title/category/date.
+ */
+let _beritaSchemaCache: "indonesia" | "english" | null = null;
+
+async function detectBeritaSchema(): Promise<"indonesia" | "english"> {
+  if (_beritaSchemaCache) return _beritaSchemaCache;
+  if (!supabase) return "indonesia";
+  // Ambil 1 baris untuk memeriksa nama kolom
+  const { data, error } = await supabase.from("berita").select("*").limit(1);
+  if (!error && data && data.length > 0) {
+    const cols = Object.keys(data[0]);
+    _beritaSchemaCache = cols.includes("judul") ? "indonesia" : "english";
+  } else {
+    // Jika tabel kosong, coba insert probe kosong dan lihat error — atau default ke Indonesia
+    _beritaSchemaCache = "indonesia";
+  }
+  return _beritaSchemaCache;
+}
+
+function buildBeritaPayload(
+  schema: "indonesia" | "english",
+  item: Partial<BeritaItem> & { title?: string; category?: string; date?: string }
+): Record<string, any> {
+  if (schema === "indonesia") {
+    const p: Record<string, any> = {};
+    if (item.title !== undefined) p.judul = item.title;
+    if (item.category !== undefined) p.kategori = item.category;
+    if (item.date !== undefined) p.tanggal = item.date;
+    if (item.image !== undefined) p.image = item.image;
+    if (item.slug !== undefined) p.slug = item.slug;
+    if (item.pdf_url !== undefined || item.pdfUrl !== undefined)
+      p.pdf_url = item.pdf_url || item.pdfUrl || null;
+    return p;
+  } else {
+    const p: Record<string, any> = {};
+    if (item.title !== undefined) p.title = item.title;
+    if (item.category !== undefined) p.category = item.category;
+    if (item.date !== undefined) p.date = item.date;
+    if (item.image !== undefined) p.image = item.image;
+    if (item.slug !== undefined) p.slug = item.slug;
+    if (item.pdf_url !== undefined || item.pdfUrl !== undefined)
+      p.pdf_url = item.pdf_url || item.pdfUrl || null;
+    return p;
+  }
+}
+
+/**
  * Tambah berita / dokumen jurnal baru ke Supabase.
+ * Auto-deteksi skema kolom Indonesia vs Inggris.
  */
 export async function createBerita(item: Omit<BeritaItem, "id">) {
   if (!supabase) {
     throw new Error("Supabase client belum terkonfigurasi di env.");
   }
-  const payload = {
-    category: item.category,
-    title: item.title,
-    date: item.date,
-    image: item.image,
-    slug: item.slug,
-    pdf_url: item.pdf_url || item.pdfUrl || null,
-  };
+  const schema = await detectBeritaSchema();
+  const payload = buildBeritaPayload(schema, item);
   const { data, error } = await supabase.from("berita").insert([payload]).select();
-  if (error) throw error;
+  if (error) {
+    // Jika schema cache salah, coba skema sebaliknya
+    _beritaSchemaCache = schema === "indonesia" ? "english" : "indonesia";
+    const retryPayload = buildBeritaPayload(_beritaSchemaCache, item);
+    const retry = await supabase.from("berita").insert([retryPayload]).select();
+    if (retry.error) {
+      _beritaSchemaCache = null; // reset cache agar deteksi ulang
+      throw retry.error;
+    }
+    return retry.data;
+  }
   return data;
 }
 
 /**
  * Update berita / dokumen jurnal di Supabase.
+ * Auto-deteksi skema kolom Indonesia vs Inggris.
  */
 export async function updateBerita(id: number | string, item: Partial<BeritaItem>) {
   if (!supabase) {
     throw new Error("Supabase client belum terkonfigurasi di env.");
   }
-  const payload: Record<string, any> = {};
-  if (item.category !== undefined) payload.category = item.category;
-  if (item.title !== undefined) payload.title = item.title;
-  if (item.date !== undefined) payload.date = item.date;
-  if (item.image !== undefined) payload.image = item.image;
-  if (item.slug !== undefined) payload.slug = item.slug;
-  if (item.pdf_url !== undefined || item.pdfUrl !== undefined) {
-    payload.pdf_url = item.pdf_url || item.pdfUrl || null;
-  }
+  const schema = await detectBeritaSchema();
+  const payload = buildBeritaPayload(schema, item);
 
   const { data, error } = await supabase
     .from("berita")
     .update(payload)
     .eq("id", id)
     .select();
-  if (error) throw error;
+
+  if (error) {
+    // Jika schema cache salah, coba skema sebaliknya
+    _beritaSchemaCache = schema === "indonesia" ? "english" : "indonesia";
+    const retryPayload = buildBeritaPayload(_beritaSchemaCache, item);
+    const retry = await supabase
+      .from("berita")
+      .update(retryPayload)
+      .eq("id", id)
+      .select();
+    if (retry.error) {
+      _beritaSchemaCache = null;
+      throw retry.error;
+    }
+    return retry.data;
+  }
   return data;
 }
 
@@ -161,21 +224,44 @@ export async function deleteBerita(id: number | string) {
 
 /**
  * Impor data awal berita bawaan (config.ts) ke Supabase.
+ * Auto-deteksi skema kolom Indonesia vs Inggris.
  */
 export async function seedBeritaLocalData() {
   if (!supabase) {
     throw new Error("Supabase client belum terkonfigurasi di env.");
   }
-  const itemsToInsert = beritaData.map((b) => ({
-    category: b.category,
-    title: b.title,
-    date: b.date,
-    image: b.image,
-    slug: b.slug,
-    pdf_url: (b as any).pdfUrl || null,
-  }));
+  const schema = await detectBeritaSchema();
+  const itemsToInsert = beritaData.map((b) =>
+    buildBeritaPayload(schema, {
+      title: b.title,
+      category: b.category,
+      date: b.date,
+      image: b.image,
+      slug: b.slug,
+      pdf_url: (b as any).pdfUrl || undefined,
+    })
+  );
   const { data, error } = await supabase.from("berita").insert(itemsToInsert).select();
-  if (error) throw error;
+  if (error) {
+    // Balik skema dan coba lagi
+    _beritaSchemaCache = schema === "indonesia" ? "english" : "indonesia";
+    const fallbackItems = beritaData.map((b) =>
+      buildBeritaPayload(_beritaSchemaCache!, {
+        title: b.title,
+        category: b.category,
+        date: b.date,
+        image: b.image,
+        slug: b.slug,
+        pdf_url: (b as any).pdfUrl || undefined,
+      })
+    );
+    const retry = await supabase.from("berita").insert(fallbackItems).select();
+    if (retry.error) {
+      _beritaSchemaCache = null;
+      throw retry.error;
+    }
+    return retry.data;
+  }
   return data;
 }
 
